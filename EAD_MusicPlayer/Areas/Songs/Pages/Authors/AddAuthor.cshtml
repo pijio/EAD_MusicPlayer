@@ -1,0 +1,26 @@
+﻿@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model EAD_MusicPlayer.Areas.Songs.Pages.Authors.AddAuthor
+
+@{
+    ViewData["Title"] = "Добавление исполнителя";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <section>
+        <div class="col-md-12 mt-1">
+            <form method="post" id="author">
+                <h4>Добавление нового исполнителя</h4>
+                <hr/>
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Input.AuthorName"></label>
+                    <input asp-for="Input.AuthorName" class="form-control"/>
+                    <span asp-validation-for="Input.AuthorName" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary">Добавить</button>
+            </form>
+        </div>
+    </section>
+</div>
