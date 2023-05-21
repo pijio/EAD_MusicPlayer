@@ -1,0 +1,53 @@
+﻿@page
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model EAD_MusicPlayer.Areas.Songs.Pages.Songs.AddSong
+
+@{
+    ViewData["Title"] = "Добавление трека";
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center mt-4">
+    <section class="d-flex flex-column">
+        <h4>Добавление нового трека</h4>
+        <hr/>
+        <form method="post" id="Genre" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Input.SongName"></label>
+                <input asp-for="Input.SongName" class="form-control"/>
+                <span asp-validation-for="Input.SongName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.ReleaseDate"></label>
+                <input asp-for="Input.ReleaseDate" class="form-control" type="date"/>
+                <span asp-validation-for="Input.ReleaseDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.AuthorId"></label>
+                @Html.DropDownListFor(m => m.Input.AuthorId, 
+                    new SelectList(Model.Authors, "Id", "Name"), 
+                    "Выберите автора", new { @class = "form-control" })
+                <span asp-validation-for="Input.AuthorId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.GenreId"></label>
+                @Html.DropDownListFor(m => m.Input.GenreId, 
+                    new SelectList(Model.Genres, "Id", "Name"), 
+                    "Выберите жанр", new { @class = "form-control" })
+                <span asp-validation-for="Input.GenreId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Track"></label>
+                <input asp-for="Input.Track" type="file" class="form-control d-flex align-content-center"/>
+                <span asp-validation-for="Input.Track" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Cover"></label>
+                <input asp-for="Input.Cover" type="file" class="form-control d-flex align-content-center"/>
+                <span asp-validation-for="Input.Cover" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Добавить</button>
+        </form>
+    </section>
+</div>

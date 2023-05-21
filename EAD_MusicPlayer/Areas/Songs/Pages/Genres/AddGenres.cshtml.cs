@@ -10,45 +10,45 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
-namespace EAD_MusicPlayer.Areas.Songs.Pages.Authors
+namespace EAD_MusicPlayer.Areas.Songs.Pages.Genres
 {
-    public class AddAuthor : PageModel
+    public class AddGenre : PageModel
     {
         private readonly ApplicationDbContext _dbContext;
         
-        [Display(Name = "Список исполнителей")]
-        public ICollection<Author> Authors;
+        [Display(Name = "Список жанров")]
+        public ICollection<Genre> Genres;
 
-        public AddAuthor(ApplicationDbContext dbContext)
+        public AddGenre(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
-            Authors = _dbContext.Authors.ToList();
+            Genres = _dbContext.Genres.ToList();
         }
         
         [BindProperty]
         public InputModel Input { get; set; }
         public class InputModel
         {
-            [Display(Name = "Имя автора")]
+            [Display(Name = "Название жанра")]
             [StringLength(maximumLength: 60, ErrorMessage = "Не более 60 символов", MinimumLength = 3)]
             [Required]
-            public string AuthorName { get; set; }
+            public string GenreName { get; set; }
         }
 
         public async Task OnGetAsync()
         {
-            Authors = await _dbContext.Authors.ToListAsync();
+            Genres = await _dbContext.Genres.ToListAsync();
         }
         
-        public async Task<IActionResult> OnPostDeleteAsync(string authorId)
+        public async Task<IActionResult> OnPostDeleteAsync(string genreId)
         {
-            var author = await _dbContext.Authors.FindAsync(authorId);
+            var Genre = await _dbContext.Genres.FindAsync(genreId);
 
-            if (author != null)
+            if (Genre != null)
             {
-                _dbContext.Authors.Remove(author);
+                _dbContext.Genres.Remove(Genre);
                 await _dbContext.SaveChangesAsync();
-                Authors.Remove(author);
+                Genres.Remove(Genre);
             }
 
             return RedirectToPage();
@@ -59,19 +59,19 @@ namespace EAD_MusicPlayer.Areas.Songs.Pages.Authors
             returnUrl ??= Url.Content("~/");
             if (ModelState.IsValid)
             {
-                if (_dbContext.Authors.FirstOrDefault(x => x.Name == Input.AuthorName) != null)
+                if (_dbContext.Genres.FirstOrDefault(x => x.Name == Input.GenreName) != null)
                 {
-                    ModelState.AddModelError("Unique", "Автор с таким именем уже существует!");
+                    ModelState.AddModelError("Unique", "Жанр с таким именем уже существует!");
                     return Page();
                 }
 
                 try
                 {
-                    var author = new Author { Id = Guid.NewGuid().ToString(), Name = Input.AuthorName };
-                    await _dbContext.Authors.AddAsync(author);
+                    var Genre = new Genre { Id = Guid.NewGuid().ToString(), Name = Input.GenreName };
+                    await _dbContext.Genres.AddAsync(Genre);
                     await _dbContext.SaveChangesAsync();
-                    Authors.Add(author);
-                    Input.AuthorName = string.Empty;
+                    Genres.Add(Genre);
+                    Input.GenreName = string.Empty;
                 }
                 catch (Exception e)
                 {

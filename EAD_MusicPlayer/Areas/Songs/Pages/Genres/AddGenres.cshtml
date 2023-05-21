@@ -1,23 +1,23 @@
 ﻿@page
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@model EAD_MusicPlayer.Areas.Songs.Pages.Authors.AddAuthor
+@model EAD_MusicPlayer.Areas.Songs.Pages.Genres.AddGenre
 
 @{
-    ViewData["Title"] = "Добавление исполнителя";
+    ViewData["Title"] = "Добавление жанра";
     Layout = "/Views/Shared/_Layout.cshtml";
 }
 
 <div class="row justify-content-between">
     <section class="w-50">
         <div class="col-md-12 mt-1">
-            <form method="post" id="author">
-                <h4>Добавление нового исполнителя</h4>
+            <form method="post" id="Genre">
+                <h4>Добавление нового жанра</h4>
                 <hr/>
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="Input.AuthorName"></label>
-                    <input asp-for="Input.AuthorName" class="form-control"/>
-                    <span asp-validation-for="Input.AuthorName" class="text-danger"></span>
+                    <label asp-for="Input.GenreName"></label>
+                    <input asp-for="Input.GenreName" class="form-control"/>
+                    <span asp-validation-for="Input.GenreName" class="text-danger"></span>
                 </div>
                 <button type="submit" class="btn btn-primary">Добавить</button>
             </form>
@@ -25,14 +25,14 @@
     </section>
     <section class="w-50">
         <div class="col-md-12 mt-1">
-            <h4>@Html.DisplayNameFor(m => m.Authors)</h4>
+            <h4>@Html.DisplayNameFor(m => m.Genres)</h4>
             <hr/>
             <ul class="list-group">
-                @foreach (var author in Model.Authors)
+                @foreach (var genre in Model.Genres)
                 {
                     <li class="list-group-item h-40">
-                        @author.Name
-                        <form method="post" asp-page-handler="Delete" asp-route-authorId="@author.Id">
+                        @genre.Name
+                        <form method="post" asp-page-handler="Delete" asp-route-GenreId="@genre.Id">
                             <button type="submit" class="btn btn-danger btn-sm float-right">Удалить</button>
                         </form>
                     </li>

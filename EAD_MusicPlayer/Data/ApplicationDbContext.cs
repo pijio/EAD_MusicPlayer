@@ -12,6 +12,7 @@ namespace EAD_MusicPlayer.Data
         public DbSet<Author> Authors { get; set; }
         
         public DbSet<Song> Songs { get; set; }
+        public DbSet<Genre> Genres { get; set; }
         
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

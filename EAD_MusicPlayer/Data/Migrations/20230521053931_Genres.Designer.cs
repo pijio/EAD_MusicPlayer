@@ -3,14 +3,16 @@ using System;
 using EAD_MusicPlayer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EAD_MusicPlayer.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230521053931_Genres")]
+    partial class Genres
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,9 +52,6 @@ namespace EAD_MusicPlayer.Data.Migrations
                     b.Property<string>("AuthorId")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("GenreId")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
@@ -68,8 +67,6 @@ namespace EAD_MusicPlayer.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
-
-                    b.HasIndex("GenreId");
 
                     b.ToTable("Songs");
                 });
@@ -276,13 +273,7 @@ namespace EAD_MusicPlayer.Data.Migrations
                         .WithMany("Songs")
                         .HasForeignKey("AuthorId");
 
-                    b.HasOne("EAD_MusicPlayer.Data.DomainModels.Genre", "Genre")
-                        .WithMany()
-                        .HasForeignKey("GenreId");
-
                     b.Navigation("Author");
-
-                    b.Navigation("Genre");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

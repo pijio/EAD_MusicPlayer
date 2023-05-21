@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace EAD_MusicPlayer.Data.DomainModels
 {
@@ -10,6 +11,7 @@ namespace EAD_MusicPlayer.Data.DomainModels
         /// <summary>
         /// ID
         /// </summary>
+        [Key]
         public string Id { get; set; }
         
         /// <summary>
@@ -35,6 +37,19 @@ namespace EAD_MusicPlayer.Data.DomainModels
         /// <summary>
         /// Исполнитель (автор)
         /// </summary>
+        public string AuthorId { get; set; }
+        /// <summary>
+        /// Исполнитель (автор)
+        /// </summary>
         public Author Author { get; set; }
+
+        /// <summary>
+        /// Жанр
+        /// </summary>
+        public string GenreId { get; set; }
+        /// <summary>
+        /// Жанр
+        /// </summary>
+        public Genre Genre { get; set; }
     }
 }
