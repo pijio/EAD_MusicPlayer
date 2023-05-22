@@ -1,8 +1,66 @@
 ﻿@page
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using EAD_MusicPlayer.Data.DomainModels
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model EAD_MusicPlayer.Areas.Songs.Pages.Songs.Songs
+@inject SignInManager<User> SignInManager
 
 @{
     ViewData["Title"] = "Треки";
     Layout = "/Views/Shared/_Layout.cshtml";
 }
+
+  <div class="container">
+    <table class="table mt-3 mb-5">
+      <thead>
+      <tr>
+        <th class="border-right" colspan="2">Трек</th>
+        <th class="border-right">Исполнитель</th>
+        <th>Действия</th>
+      </tr>
+      </thead>
+      <tbody>
+      @foreach (var track in Model.Tracks)
+      {
+        <tr>
+          <td><img src=@Url.Content($"~/{track.PathToCover.Replace('\\', '/')}") alt="@track.Name" width="50" height="50"/></td>
+          <td class="align-middle">@track.Name</td>
+          <td class="align-middle">@track.AuthorName</td>
+          <td class="align-middle">
+            <div class="d-flex justify-content-around align-items-center">
+              <audio controls>
+                <source src=@Url.Content($"~/{track.PathToTrack.Replace('\\', '/')}") type="audio/mpeg"/>
+                Audio not support by your browser
+              </audio>
+              <div class="dropdown">
+                <button class="btn btn-outline-dark rounded" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  ...
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  @if (SignInManager.IsSignedIn(User))
+                  {
+                    <a class="dropdown-item" href="#">Добавить в плейлист</a>
+                  }
+                  @if (User.IsInRole("Admin"))
+                  {
+                    <form method="post" asp-page-handler="Delete" asp-route-trackId="@track.Id">
+                      <button type="submit" class="dropdown-item text-danger">Удалить</button>
+                    </form>
+                  }
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      }
+      </tbody>
+    </table>
+    <div class="d-flex mr-1">
+      @for (var i = 1; i <= Model.PagesCount; i++)
+      {
+        var style = i == Model.CurrentPage ? "btn-dark" : "btn-outline-dark";
+        <a href="/Songs/Songs?pageNo=@i" class="btn @style">@i</a>
+      }
+    </div>
+  </div>

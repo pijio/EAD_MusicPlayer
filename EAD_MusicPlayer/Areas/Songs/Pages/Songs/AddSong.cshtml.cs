@@ -8,6 +8,7 @@ using EAD_MusicPlayer.Data;
 using EAD_MusicPlayer.Data.DomainModels;
 using EAD_MusicPlayer.Helpers;
 using Humanizer;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -29,7 +30,7 @@ namespace EAD_MusicPlayer.Areas.Songs.Pages.Songs
             Authors = _dbContext.Authors.ToList();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync([FromServices] IWebHostEnvironment env)
         {
             if (!ModelState.IsValid) return Page();
             if (!Input.Cover.ContentType.StartsWith("image/") || Input.Cover == null)
@@ -45,10 +46,16 @@ namespace EAD_MusicPlayer.Areas.Songs.Pages.Songs
 
             var trackId = Guid.NewGuid().ToString();
             var pathToTrack = Path.Combine("tracks", trackId + Path.GetExtension(Input.Track.FileName).ToLower());
-            await FileHelper.SaveFile(Input.Track, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathToTrack));
+            await FileHelper.SaveFile(Input.Track, Path.Combine(env.WebRootPath, pathToTrack));
             var coverId = Guid.NewGuid().ToString();
             var pathToCover = Path.Combine("covers", coverId + Path.GetExtension(Input.Cover.FileName).ToLower());
-            await FileHelper.SaveFile(Input.Cover, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, pathToCover));
+            await FileHelper.SaveFile(Input.Cover, Path.Combine(env.WebRootPath, pathToCover));
+
+            if (_dbContext.Songs.FirstOrDefault(x => x.Name == Input.SongName) != null)
+            {
+                ModelState.AddModelError("NotAudio", "Трек с таким именем уже существует");
+                return Page();
+            }
 
             var song = new Song()
             {

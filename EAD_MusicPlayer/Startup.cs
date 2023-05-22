@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using EAD_MusicPlayer.Data;
 using EAD_MusicPlayer.Data.DomainModels;
+using EAD_MusicPlayer.Services.Base;
+using EAD_MusicPlayer.Services.Implementation;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,7 +40,10 @@ namespace EAD_MusicPlayer
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddSingleton(Configuration);
+            services.AddScoped<ITrackService, TrackService>();
             services.AddControllersWithViews();
+            services.AddRazorPages().AddMvcOptions(options =>
+                options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(_ => "The field is required."));
         }
 
         public async void Configure(IApplicationBuilder app, IWebHostEnvironment env, RoleManager<IdentityRole> roleManager)

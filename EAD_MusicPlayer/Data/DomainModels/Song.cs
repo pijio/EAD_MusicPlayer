@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace EAD_MusicPlayer.Data.DomainModels
@@ -51,5 +53,10 @@ namespace EAD_MusicPlayer.Data.DomainModels
         /// Жанр
         /// </summary>
         public Genre Genre { get; set; }
+        
+        /// <summary>
+        /// Треки в плейлистах
+        /// </summary>
+        public ICollection<PlaylistSong> PlaylistSongs { get; set; }
     }
 }

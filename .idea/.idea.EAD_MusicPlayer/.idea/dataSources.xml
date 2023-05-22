@@ -2,7 +2,7 @@
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
     <data-source source="LOCAL" name="app" uuid="c317fe49-adea-4dd7-a606-a113b0d117ca">
-      <driver-ref>sqlite.xerial</driver-ref>
+      <driver-ref>28940dc7-c094-4c58-b2c7-1d09ab3f8ba0</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:C:\Users\Arthur\RiderProjects\EAD_MusicPlayer\EAD_MusicPlayer\app.db</jdbc-url>
@@ -29,7 +29,7 @@
       </libraries>
     </data-source>
     <data-source source="LOCAL" name="app [2]" uuid="9d440929-7e9f-47b4-9409-7ae7466240e1">
-      <driver-ref>sqlite.xerial</driver-ref>
+      <driver-ref>28940dc7-c094-4c58-b2c7-1d09ab3f8ba0</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:C:\Users\Arthur\RiderProjects\EAD_MusicPlayer\EAD_MusicPlayer\app.db</jdbc-url>
@@ -52,6 +52,18 @@
         </library>
         <library>
           <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.40.1/org/xerial/sqlite-jdbc/3.40.1.0/_remote.repositories</url>
+        </library>
+      </libraries>
+    </data-source>
+    <data-source source="LOCAL" name="app [3]" uuid="090e2029-ca10-405a-9a2e-62bfafebd315">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:C:\Users\arthur.bushev\RiderProjects\EAD_MusicPlayer\EAD_MusicPlayer\app.db</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+      <libraries>
+        <library>
+          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.40.1/org/xerial/sqlite-jdbc/3.40.1.0/sqlite-jdbc-3.40.1.0.jar</url>
         </library>
       </libraries>
     </data-source>

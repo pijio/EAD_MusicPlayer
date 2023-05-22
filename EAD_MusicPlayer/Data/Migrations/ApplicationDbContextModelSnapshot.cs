@@ -42,6 +42,47 @@ namespace EAD_MusicPlayer.Data.Migrations
                     b.ToTable("Genres");
                 });
 
+            modelBuilder.Entity("EAD_MusicPlayer.Data.DomainModels.Playlist", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("OwnerId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PathToCover")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Playlists");
+                });
+
+            modelBuilder.Entity("EAD_MusicPlayer.Data.DomainModels.PlaylistSong", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PlaylistId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SongId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlaylistId");
+
+                    b.HasIndex("SongId");
+
+                    b.ToTable("PlaylistSongs");
+                });
+
             modelBuilder.Entity("EAD_MusicPlayer.Data.DomainModels.Song", b =>
                 {
                     b.Property<string>("Id")
@@ -270,6 +311,30 @@ namespace EAD_MusicPlayer.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("EAD_MusicPlayer.Data.DomainModels.Playlist", b =>
+                {
+                    b.HasOne("EAD_MusicPlayer.Data.DomainModels.User", "Owner")
+                        .WithMany("Playlists")
+                        .HasForeignKey("OwnerId");
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("EAD_MusicPlayer.Data.DomainModels.PlaylistSong", b =>
+                {
+                    b.HasOne("EAD_MusicPlayer.Data.DomainModels.Playlist", "Playlist")
+                        .WithMany("PlaylistSongs")
+                        .HasForeignKey("PlaylistId");
+
+                    b.HasOne("EAD_MusicPlayer.Data.DomainModels.Song", "Song")
+                        .WithMany("PlaylistSongs")
+                        .HasForeignKey("SongId");
+
+                    b.Navigation("Playlist");
+
+                    b.Navigation("Song");
+                });
+
             modelBuilder.Entity("EAD_MusicPlayer.Data.DomainModels.Song", b =>
                 {
                     b.HasOne("EAD_MusicPlayer.Data.DomainModels.Author", "Author")
@@ -339,6 +404,21 @@ namespace EAD_MusicPlayer.Data.Migrations
             modelBuilder.Entity("EAD_MusicPlayer.Data.DomainModels.Author", b =>
                 {
                     b.Navigation("Songs");
+                });
+
+            modelBuilder.Entity("EAD_MusicPlayer.Data.DomainModels.Playlist", b =>
+                {
+                    b.Navigation("PlaylistSongs");
+                });
+
+            modelBuilder.Entity("EAD_MusicPlayer.Data.DomainModels.Song", b =>
+                {
+                    b.Navigation("PlaylistSongs");
+                });
+
+            modelBuilder.Entity("EAD_MusicPlayer.Data.DomainModels.User", b =>
+                {
+                    b.Navigation("Playlists");
                 });
 #pragma warning restore 612, 618
         }
