@@ -13,6 +13,29 @@
 }
 
 <h3 class="row justify-content-center">Все треки</h3>
+<form method="post" id="Song" asp-page-handler="Search" class="d-flex flex-column justify-content-center align-items-center">
+  <div asp-validation-summary="All" class="text-danger"></div>
+  <div class="align-items-center justify-content-around">
+      <div class="form-group">
+        <label asp-for="SearchPattern.SearchText"></label>
+        <input asp-for="SearchPattern.SearchText" class="form-control"/>
+        <span asp-validation-for="SearchPattern.SearchText" class="text-danger"></span>
+      </div>    
+      <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="findBySongName" asp-for="SearchPattern.FindBySongName">
+          <label class="form-check-label" for="findBySongName">
+              Найти по названию песни
+          </label>
+      </div>
+      <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="findByAuthorName" asp-for="SearchPattern.FindByAuthorName">
+          <label class="form-check-label" for="findByAuthorName">
+              Найти по имени исполнителя
+          </label>
+      </div>
+  </div>
+  <button type="submit" class="btn btn-primary">Найти</button>
+</form>
 <div class="container">
     <table class="table mt-3 mb-5">
       <thead>
@@ -40,15 +63,15 @@
                   ...
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  @if (SignInManager.IsSignedIn(User))
+                  @if (SignInManager.IsSignedIn(User) && Model.Playlist.Count() != 0)
                   {
                     <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item" href="#" id="playlistButton">Добавить в плейлист</button>
                     <div class="dropdown-menu" aria-labelledby="playlistButton">
                       @foreach (var playlist in Model.Playlist)
                       {
                         <div class="dropdown-item">
-                          <form method="post" asp-page-handler="AddTrackToPlaylist" asp-route-trackId="@track.Id" asp-route-playlistId="@playlist.Id">
-                            <button type="submit" class="btn btn-outline-dark">@playlist.Name</button>
+                          <form method="post" asp-page-handler="AddTrackToPlaylist" asp-route-trackId="@track.Id" asp-route-playlistId="@playlist.Id" style="width: 100%">
+                            <button type="submit" class="btn btn-outline-dark w-100">@playlist.Name</button>
                           </form>
                         </div>
                       }

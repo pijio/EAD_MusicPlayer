@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -31,6 +32,9 @@ namespace EAD_MusicPlayer.Areas.Songs.Pages.Songs
         public int CurrentPage { get; set; } = 1;
         public int PagesCount { get; set; }
         
+        [BindProperty(SupportsGet = true)]
+        public SearchModel SearchPattern { get; set; }
+
         public Songs(ApplicationDbContext dbContext, ITrackService trackService, SignInManager<User> identityManager)
         {
             _dbContext = dbContext;
@@ -74,11 +78,35 @@ namespace EAD_MusicPlayer.Areas.Songs.Pages.Songs
             Playlist = (await GetPlaylists()).ToList();
             return Page();
         }
+        
+        public async Task<IActionResult> OnPostSearch()
+        {
+            if (string.IsNullOrEmpty(SearchPattern.SearchText))
+                return RedirectToPage();
+            Tracks = (await _trackService.GetFilteredTracks(SearchPattern)).Tracks;
+            PagesCount = 0;
+            CurrentPage = 1;
+            Playlist = (await GetPlaylists()).ToList();
+            return Page();
+        }
 
         public async Task<IActionResult> OnPostAddTrackToPlaylist(string trackId, string playlistId)
         {
             var playListTrackId = Guid.NewGuid().ToString();
+            if (_dbContext.PlaylistSongs.FirstOrDefault(x => x.PlaylistId == playlistId && x.SongId == trackId) != null)
+                return RedirectToPage();
+            var playlistSong = new PlaylistSong() { Id = playListTrackId, PlaylistId = playlistId, SongId = trackId };
+            await _dbContext.AddAsync(playlistSong);
+            await _dbContext.SaveChangesAsync();
             return RedirectToPage();
+        }
+        
+        public class SearchModel
+        {
+            [Display(Name = "Поиск")]
+            public string SearchText { get; set; }
+            public bool FindBySongName { get; set; }
+            public bool FindByAuthorName { get; set; }
         }
     }
 }

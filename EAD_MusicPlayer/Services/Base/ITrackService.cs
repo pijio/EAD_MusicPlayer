@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using EAD_MusicPlayer.Areas.Songs.Pages.Songs;
 using EAD_MusicPlayer.Data.DomainModels;
 using EAD_MusicPlayer.Models;
 
@@ -19,7 +20,7 @@ namespace EAD_MusicPlayer.Services.Base
         /// <summary>
         /// Получение треков плейлиста
         /// </summary>
-        Task<List<TrackViewModel>> GetPlaylistTrack(string playListId);
+        Task<List<TrackViewModel>> GetPlaylistTrack(string playListId, int pageNo, int pageSize);
 
         /// <summary>
         /// Получение треков с помощью пагинации
@@ -41,5 +42,10 @@ namespace EAD_MusicPlayer.Services.Base
         /// <param name="id">id плейлиста</param>
         /// <returns></returns>
         Task<IEnumerable<PlaylistViewModel>> GetUserPlaylists(string id = null);
+
+        /// <summary>
+        /// Фильтрация треков с пагинацией
+        /// </summary>
+        Task<FilteredTracksViewModel> GetFilteredTracks(Songs.SearchModel model);
     }
 }
