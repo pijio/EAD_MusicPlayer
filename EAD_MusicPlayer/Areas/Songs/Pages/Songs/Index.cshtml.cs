@@ -1,23 +1,29 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using EAD_MusicPlayer.Data;
+using EAD_MusicPlayer.Data.DomainModels;
 using EAD_MusicPlayer.Models;
 using EAD_MusicPlayer.Services.Base;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EAD_MusicPlayer.Areas.Songs.Pages.Songs
 {
     [Area("Songs")]
-    [Route("/Songs/Songs")]
     public class Songs : PageModel
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly ITrackService _trackService;
+        private readonly SignInManager<User> _identityManager;
         private static int _pageSize = 10;
+        
+        public  ICollection<PlaylistViewModel> Playlist { get; private set; }
         
         [BindProperty(SupportsGet = true)]
         public IEnumerable<TrackViewModel> Tracks { get; private set; }
@@ -25,10 +31,28 @@ namespace EAD_MusicPlayer.Areas.Songs.Pages.Songs
         public int CurrentPage { get; set; } = 1;
         public int PagesCount { get; set; }
         
-        public Songs(ApplicationDbContext dbContext, ITrackService trackService)
+        public Songs(ApplicationDbContext dbContext, ITrackService trackService, SignInManager<User> identityManager)
         {
             _dbContext = dbContext;
             _trackService = trackService;
+            _identityManager = identityManager;
+        }
+        
+        private async Task<IEnumerable<PlaylistViewModel>> GetPlaylists()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _identityManager.UserManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                ModelState.AddModelError("User", "Непридвиденная ошибка");
+                return null;
+            }
+
+            if (await _identityManager.UserManager.IsInRoleAsync(user, "Admin"))
+            {
+                return await _trackService.GetUserPlaylists();
+            }
+            return await _trackService.GetUserPlaylists(userId);
         }
         
         public async Task<IActionResult> OnPostDeleteAsync(string trackId)
@@ -42,13 +66,19 @@ namespace EAD_MusicPlayer.Areas.Songs.Pages.Songs
             return RedirectToPage();
         }
         
-        [Authorize]
         public async Task<IActionResult> OnGetAsync(int pageNo = 1)
         {
             Tracks = await _trackService.GetTracksPage(pageNo, _pageSize);
             PagesCount = await _trackService.GetPagesCount(_pageSize);
             CurrentPage = pageNo;
+            Playlist = (await GetPlaylists()).ToList();
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostAddTrackToPlaylist(string trackId, string playlistId)
+        {
+            var playListTrackId = Guid.NewGuid().ToString();
+            return RedirectToPage();
         }
     }
 }

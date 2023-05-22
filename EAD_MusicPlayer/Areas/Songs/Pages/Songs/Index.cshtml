@@ -1,6 +1,7 @@
 ﻿@page
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @using EAD_MusicPlayer.Data.DomainModels
+@using EAD_MusicPlayer.Data.Migrations
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model EAD_MusicPlayer.Areas.Songs.Pages.Songs.Songs
@@ -11,7 +12,8 @@
     Layout = "/Views/Shared/_Layout.cshtml";
 }
 
-  <div class="container">
+<h3 class="row justify-content-center">Все треки</h3>
+<div class="container">
     <table class="table mt-3 mb-5">
       <thead>
       <tr>
@@ -40,7 +42,17 @@
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   @if (SignInManager.IsSignedIn(User))
                   {
-                    <a class="dropdown-item" href="#">Добавить в плейлист</a>
+                    <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-item" href="#" id="playlistButton">Добавить в плейлист</button>
+                    <div class="dropdown-menu" aria-labelledby="playlistButton">
+                      @foreach (var playlist in Model.Playlist)
+                      {
+                        <div class="dropdown-item">
+                          <form method="post" asp-page-handler="AddTrackToPlaylist" asp-route-trackId="@track.Id" asp-route-playlistId="@playlist.Id">
+                            <button type="submit" class="btn btn-outline-dark">@playlist.Name</button>
+                          </form>
+                        </div>
+                      }
+                    </div>
                   }
                   @if (User.IsInRole("Admin"))
                   {
