@@ -58,7 +58,7 @@ namespace EAD_MusicPlayer.Services.Implementation
                 new TrackViewModel
                 {
                     AuthorName = x.Song.Author.Name,
-                    Id = x.Id,
+                    Id = x.SongId,
                     Name = x.Song.Name,
                     PathToCover = x.Song.PathToCover,
                     PathToTrack = x.Song.PathToSong

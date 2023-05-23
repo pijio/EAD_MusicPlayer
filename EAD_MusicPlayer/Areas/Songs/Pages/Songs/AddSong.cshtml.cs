@@ -8,6 +8,7 @@ using EAD_MusicPlayer.Data;
 using EAD_MusicPlayer.Data.DomainModels;
 using EAD_MusicPlayer.Helpers;
 using Humanizer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EAD_MusicPlayer.Areas.Songs.Pages.Songs
 {
+    [Authorize(Roles = "Admin")]
     public class AddSong : PageModel
     {
         private readonly ApplicationDbContext _dbContext;

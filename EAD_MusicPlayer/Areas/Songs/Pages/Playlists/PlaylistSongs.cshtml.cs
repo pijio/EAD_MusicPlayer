@@ -54,7 +54,7 @@ namespace EAD_MusicPlayer.Areas.Songs.Pages.Playlists
                 return RedirectToPage();
             _dbContext.Remove(song);
             await _dbContext.SaveChangesAsync();
-            return Page();
+            return RedirectToPage();
         }
     }
 }
